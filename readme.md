@@ -1,0 +1,1 @@
+## To start: `python -m app.main`

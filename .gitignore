@@ -1,0 +1,9 @@
+# Ignore Python cache directories
+__pycache__/
+**/__pycache__/
+
+# Add other files and directories to ignore below
+*.pyc
+*.log
+*.env
+venv/
