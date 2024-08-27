@@ -14,12 +14,14 @@ class InRfidWidget(QWidget):
         form_layout = QVBoxLayout()
         form_layout.setAlignment(Qt.AlignCenter)
 
+        stylesheet = 'app/stylesheet/login/lineEdit.qss'
+
         # RFID Tag
         rfid_label = QLabel('RFID Tag:', self)
         rfid_label.setFont(QFont('Arial', 12, QFont.Bold))
         self.rfid_entry = QLineEdit(self)
         self.rfid_entry.setFixedHeight(35)
-        self.rfid_entry.setStyleSheet(self.load_stylesheet('app/stylesheet/login/lineEdit.qss'))
+        self.rfid_entry.setStyleSheet(self.load_stylesheet(stylesheet))
         self.rfid_entry.setPlaceholderText("RFID Tag")
         self.rfid_entry.editingFinished.connect(self.fetch_vehicle_details)  # Trigger when editing is finished
 
@@ -28,7 +30,7 @@ class InRfidWidget(QWidget):
         vehicle_type_label.setFont(QFont('Arial', 12, QFont.Bold))
         self.vehicle_type_entry = QLineEdit(self)
         self.vehicle_type_entry.setFixedHeight(35)
-        self.vehicle_type_entry.setStyleSheet(self.load_stylesheet('app/stylesheet/login/lineEdit.qss'))
+        self.vehicle_type_entry.setStyleSheet(self.load_stylesheet(stylesheet))
         self.vehicle_type_entry.setPlaceholderText("Type of Vehicle")
 
         # Vehicle No
@@ -36,7 +38,7 @@ class InRfidWidget(QWidget):
         vehicle_no_label.setFont(QFont('Arial', 12, QFont.Bold))
         self.vehicle_no_entry = QLineEdit(self)
         self.vehicle_no_entry.setFixedHeight(35)
-        self.vehicle_no_entry.setStyleSheet(self.load_stylesheet('app/stylesheet/login/lineEdit.qss'))
+        self.vehicle_no_entry.setStyleSheet(self.load_stylesheet(stylesheet))
         self.vehicle_no_entry.setPlaceholderText("Vehicle No")
 
         # Validity Till
@@ -44,7 +46,7 @@ class InRfidWidget(QWidget):
         validity_label.setFont(QFont('Arial', 12, QFont.Bold))
         self.validity_entry = QLineEdit(self)
         self.validity_entry.setFixedHeight(35)
-        self.validity_entry.setStyleSheet(self.load_stylesheet('app/stylesheet/login/lineEdit.qss'))
+        self.validity_entry.setStyleSheet(self.load_stylesheet(stylesheet))
         self.validity_entry.setPlaceholderText("Validity Till")
 
         # Status Label
