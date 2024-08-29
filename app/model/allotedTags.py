@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Enum, DateTime, BINARY, Integer, Float, Text
+from sqlalchemy import Column, String, Enum, DateTime, BINARY, Integer, Float, Text, Boolean  # Import Boolean type
 from sqlalchemy.dialects.mysql import ENUM as MySQLEnum, BINARY as MySQLBinary
 from sqlalchemy.ext.declarative import declarative_base
 from enum import Enum as PyEnum
@@ -22,36 +22,17 @@ class BarrierStatusEnum(PyEnum):
     OPEN = "OPEN"
     CLOSED = "CLOSED"
 
-# Step 3: Define the InternalRFID Model
+# Step 3: Define the AllotedTags Model
 class AllotedTags(Base):
     __tablename__ = "alloted_tags"
 
     id = Column(MySQLBinary(16), primary_key=True, default=lambda: uuid.uuid4().bytes)
     rfidTag = Column(String(255), nullable=False)
-    typeOfVehicle = Column(MySQLEnum(VehicleTypeEnum), nullable=False)  # Using MySQL ENUM
+    typeOfVehicle = Column(MySQLEnum(VehicleTypeEnum), nullable=False)
     vehicleNumber = Column(String(100), nullable=False)
-    doNumber = Column(String(100), nullable=True)
-    transporter = Column(String(255), nullable=True)
-    driverOwner = Column(String(255), nullable=True)
-    weighbridgeNo = Column(String(100), nullable=True)
-    visitPurpose = Column(String(255), nullable=True)
-    placeToVisit = Column(String(255), nullable=True)
-    personToVisit = Column(String(255), nullable=True)
-    validityTill = Column(String(255), nullable=True)
-    section = Column(String(100), nullable=True)
-    
-    # New Fields
-    dateIn = Column(Text, nullable=False)  
-    timeIn = Column(Text, nullable=False)
-    user = Column(String(255), nullable=True)
-    shift = Column(String(100), nullable=True)
-    dateOut = Column(Text, nullable=True)
-    timeOut = Column(Text, nullable=True)
-    gross = Column(Float, nullable=True)
-    tare = Column(Float, nullable=True)
-    net = Column(Float, nullable=True)
-    barrierStatus = Column(MySQLEnum(BarrierStatusEnum), nullable=True, default=BarrierStatusEnum.CLOSED)
-    challanNo = Column(String(255), nullable=True)
+    regDate = Column(Text, nullable=False)  
+    regTime = Column(Text, nullable=False)  
+    blacklisted = Column(Boolean, default=False, nullable=False)
 
     createdAt = Column(DateTime, default=datetime.utcnow)
     updatedAt = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)

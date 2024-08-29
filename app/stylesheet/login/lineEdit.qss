@@ -1,61 +1,69 @@
+/* General Label Styling */
 QLabel {
     color: white;
-    font-size: 14px; /* Reduced font size for a more standard appearance */
+    font-size: 14px; /* Standard font size for readability */
+    font-weight: bold; /* Bold text for better visibility */
+    margin-right: 10px; /* Reduce margin between label and input */
 }
 
+/* TextBox and ComboBox Styling */
 QLineEdit, QComboBox {
-    font-size: 12px;  /* Further reduced font size */
-    height: 20px;     /* Decreased height for a more compact input field */
-    width: 150px;     /* Set a specific width to reduce the size */
-    border-radius: 3px;  /* Further reduced border-radius */
-    padding: 2px;     /* Adjusted padding to fit the smaller size */
-    border: 1px solid #89CFF0;  /* Default color border */
-    background-color: #4D4D4D;
+    font-size: 14px;  /* Increased font size for better readability */
+    height: 28px;     /* Standardized height for all input fields */
+    width: 200px;     /* Consistent width for a clean layout */
+    border-radius: 5px;  /* Smooth border-radius */
+    padding: 4px;     /* Padding for comfortable text placement */
+    border: 1px solid #89CFF0;  /* Light blue border for a subtle look */
+    background-color: #4D4D4D; /* Darker background for contrast */
+    color: white; /* Text color for visibility */
 }
 
+/* Disabled State Styling */
 QLineEdit[enabled="false"], QComboBox[enabled="false"] {
-    border: 1px solid red;  /* Red border when disabled */
+    border: 1px solid red;  /* Red border for disabled state */
     color: #888888;  /* Light grey text color */
     background-color: #3E3E3E;  /* Darker background for disabled state */
 }
 
+/* ComboBox Dropdown Styling */
 QComboBox {
-    padding-right: 12px;  /* Adjust padding to make space for the arrow */
+    padding-right: 15px;  /* Padding to make space for the arrow */
 }
 
 QComboBox::drop-down {
     border: 0px;  /* Remove the border around the dropdown button */
-    width: 12px;  /* Reduced width for the dropdown button */
+    width: 15px;  /* Standard width for dropdown button */
     subcontrol-origin: padding;
     subcontrol-position: top right;
 }
 
 QComboBox::down-arrow {
     image: none;  /* Remove the default arrow image */
-    border: 1px solid #89CFF0;  /* Add border to the arrow button */
-    width: 10px;  /* Reduced width for the custom arrow */
-    height: 10px; /* Reduced height for the custom arrow */
-    background-color: #89CFF0;  /* Background color for the arrow button */
-    border-radius: 5px;  /* Reduced radius for the arrow button */
+    border: 1px solid #89CFF0;  /* Light blue border for the arrow button */
+    width: 10px;  /* Standard width for the custom arrow */
+    height: 10px; /* Standard height for the custom arrow */
+    background-color: #89CFF0;  /* Light blue background for the arrow button */
+    border-radius: 5px;  /* Smooth radius for the arrow button */
 }
 
 QComboBox::down-arrow:hover {
-    background-color: #08203c;  /* Change color on hover */
+    background-color: #08203c;  /* Darker blue on hover */
 }
 
+/* Button Styling */
 QPushButton {
-    font-size: 14px;  /* Reduced font size */
-    height: 28px;     /* Adjusted height for buttons */
-    border-radius: 5px;  /* Reduced border-radius */
-    padding: 4px;        /* Adjusted padding */
+    font-size: 14px;  /* Standard font size */
+    height: 32px;     /* Standard button height */
+    border-radius: 5px;  /* Smooth border-radius */
+    padding: 6px;        /* Standard padding */
     background-color: qlineargradient(
         spread:pad, x1:0, y1:0, x2:1, y2:1, 
         stop:0 #1E90FF, stop:1 #0066CC
     );
-    color: white;        /* Set text color */
+    color: white;        /* White text for visibility */
     border: none;        /* Remove default border */
 }
 
 QPushButton:hover {
-    background-color: #45a049;  /* Change color on hover */
+    background-color: #45a049;  /* Green color on hover for feedback */
 }

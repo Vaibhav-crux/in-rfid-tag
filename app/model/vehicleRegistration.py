@@ -33,6 +33,8 @@ class VehicleRegistration(Base):
     visitPurpose = Column(String(255), nullable=True)
     placeToVisit = Column(String(255), nullable=True)
     personToVisit = Column(String(255), nullable=True)
+    validityTill = Column(String(255), nullable=True)
+    section = Column(String(255), nullable=True)
     
     # New Fields
     registerDate = Column(Text, nullable=False)  

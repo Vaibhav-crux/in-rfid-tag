@@ -19,14 +19,12 @@ class LoginWindow(QWidget):
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
         self.setWindowTitle('Login')
-        self.setGeometry(100, 100, 500, 400)
-        self.setFixedSize(500, 550)  # Fixed size to avoid resizing
+
+        # Make the window full screen
+        self.showFullScreen()  # This will make the window full screen
 
         # Apply rounded corners
-        self.apply_rounded_corners(20)
-
-        # Center the window on the screen
-        self.center_on_screen()
+        # self.apply_rounded_corners(20)
 
         # Main layout
         main_layout = QVBoxLayout()
@@ -70,6 +68,11 @@ class LoginWindow(QWidget):
         content_layout = QVBoxLayout(content_frame)
         content_layout.setAlignment(Qt.AlignCenter)
 
+        # Image Frame
+        image_frame = QFrame(self)
+        image_layout = QVBoxLayout(image_frame)
+        image_layout.setAlignment(Qt.AlignCenter)
+
         # Image in a circular shape
         image_label = QLabel(self)
         radius = 75
@@ -78,15 +81,24 @@ class LoginWindow(QWidget):
         image_label.setFixedSize(2 * radius, 2 * radius)
         image_label.setAlignment(Qt.AlignCenter)
 
-        image_layout = QVBoxLayout()
         image_layout.addWidget(image_label)
-        image_layout.setAlignment(Qt.AlignCenter)
 
-        # Add InRfidWidget to the content layout
+        # Add the image frame to the content layout
+        content_layout.addWidget(image_frame)
+
+        # InRfidWidget Frame
+        rfid_frame = QFrame(self)
+        rfid_layout = QVBoxLayout(rfid_frame)
+        rfid_layout.setAlignment(Qt.AlignCenter)
+
+        # Add InRfidWidget to the RFID frame
         rfid_widget = InRfidWidget(self)
-        content_layout.addLayout(image_layout)
-        content_layout.addWidget(rfid_widget)
+        rfid_layout.addWidget(rfid_widget)
 
+        # Add the RFID frame to the content layout
+        content_layout.addWidget(rfid_frame)
+
+        # Add content frame to main layout
         main_layout.addWidget(content_frame)
         self.setLayout(main_layout)
 
@@ -104,13 +116,6 @@ class LoginWindow(QWidget):
         region = QRegion(path.toFillPolygon().toPolygon())
         self.setMask(region)
 
-    def center_on_screen(self):
-        """Center the window on the screen."""
-        screen_geometry = QApplication.desktop().screenGeometry()
-        x = (screen_geometry.width() - self.width()) // 2
-        y = (screen_geometry.height() - self.height()) // 2
-        self.move(x, y)
-
     def mousePressEvent(self, event):
         # Enable dragging of the window
         if event.button() == Qt.LeftButton:
@@ -127,5 +132,5 @@ class LoginWindow(QWidget):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = LoginWindow()
-    window.show()
+    window.showFullScreen()  # Ensure it opens in full screen
     sys.exit(app.exec_())
