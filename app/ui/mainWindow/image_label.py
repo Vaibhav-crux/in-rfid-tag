@@ -9,7 +9,7 @@ def create_image_label(parent):
     """Creates a QLabel with an image loaded from a predefined URL."""
     
     # Predefined image URL
-    image_url = "https://wallpapercave.com/wp/wp8313585.jpg"
+    image_url = "https://wallpapercave.com/uwp/uwp4394072.jpeg"
     
     image_label = QLabel(parent)
     pixmap = load_image_from_url(image_url)

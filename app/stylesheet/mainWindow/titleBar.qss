@@ -1,0 +1,4 @@
+/* app/stylesheet/mainWindow/title_bar.qss */
+QFrame {
+    background-color: #333333;
+}

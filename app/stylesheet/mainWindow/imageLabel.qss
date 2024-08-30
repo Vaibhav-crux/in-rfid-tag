@@ -1,0 +1,5 @@
+/* app/stylesheet/mainWindow/image_label.qss */
+/* Add any QLabel specific styles here */
+QLabel {
+    /* Example: No additional styles were defined in the original code */
+}
