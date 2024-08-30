@@ -18,7 +18,7 @@ class LoginWindow(QWidget):
         # Window settings
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
-        self.setWindowTitle('Login')
+        self.setWindowTitle('In Vehicle')
 
         # Make the window full screen
         self.showFullScreen()  # This will make the window full screen
@@ -41,7 +41,7 @@ class LoginWindow(QWidget):
         left_spacer = QLabel('', title_bar)
         title_bar_layout.addWidget(left_spacer)
 
-        title_label = QLabel('Login', title_bar)
+        title_label = QLabel('Vehicle In ', title_bar)
         title_label.setAlignment(Qt.AlignCenter)
         title_bar_layout.addWidget(title_label)
 

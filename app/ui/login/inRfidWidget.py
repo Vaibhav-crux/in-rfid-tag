@@ -25,9 +25,9 @@ class InRfidWidget(QWidget):
         common_width = 200
 
         # Create each label and text box in the same row
-        self.create_row(form_layout, 'RFID Tag:', 'rfid_entry', stylesheet, common_width)
+        self.create_row(form_layout, 'RFID Tag:', 'rfid_entry', stylesheet, common_width, read_only=True)
         self.create_row(form_layout, 'Type of Vehicle:', 'vehicle_type_entry', stylesheet, common_width, read_only=True)
-        self.create_row(form_layout, 'Vehicle No:', 'vehicle_no_entry', stylesheet, common_width)
+        self.create_row(form_layout, 'Vehicle No:', 'vehicle_no_entry', stylesheet, common_width, read_only=True)
         self.create_row(form_layout, 'Validity Till:', 'validity_entry', stylesheet, common_width, read_only=True)
         self.create_row(form_layout, 'Transporter:', 'transporter_entry', stylesheet, common_width, read_only=True)
         self.create_row(form_layout, 'Driver/Owner:', 'driver_owner_entry', stylesheet, common_width, read_only=True)
