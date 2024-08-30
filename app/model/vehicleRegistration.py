@@ -35,8 +35,6 @@ class VehicleRegistration(Base):
     personToVisit = Column(String(255), nullable=True)
     validityTill = Column(String(255), nullable=True)
     section = Column(String(255), nullable=True)
-    
-    # New Fields
     registerDate = Column(Text, nullable=False)  
     registerTime = Column(Text, nullable=False)
     user = Column(String(255), nullable=True)

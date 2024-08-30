@@ -1,0 +1,8 @@
+/* app/stylesheet/login/button.qss */
+QPushButton {
+    background-color: #1E90FF;
+    color: white;
+    padding: 10px;
+    border-radius: 15px;
+    font-size: 12px;
+}

@@ -1,15 +1,20 @@
 # app/ui/mainWindow/mainWindow.py
 
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout
-from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QFrame
+from PyQt5.QtCore import Qt, QTimer
 from .title_bar import create_title_bar
 from .image_label import create_image_label
+from .leftLayout import create_left_form_layout
+from .rightLayout import create_right_form_layout
+from .fetchDataFromFile import fetch_and_update_rfid
+from .timeSection import create_clock_frame
 
 class FullScreenWindow(QWidget):
     def __init__(self):
         super().__init__()
-        self.initUI()
+        self.vehicle_info = {}
+        self.setup_ui()
 
     def load_stylesheet(self, file_path):
         """Utility function to load and return a stylesheet."""
@@ -20,24 +25,96 @@ class FullScreenWindow(QWidget):
             print(f"Stylesheet file not found: {file_path}")
             return ""
 
-    def initUI(self):
+    def setup_ui(self):
+        """Main UI setup method."""
+        # Apply the stylesheet
+        stylesheet = self.load_stylesheet("app/stylesheet/mainWindow/mainWindow.qss")
+        self.setStyleSheet(stylesheet)
+
         # Remove the default title bar
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.showMaximized()
 
-        # Main layout
+        # Main layout with margins
         main_layout = QVBoxLayout()
-        main_layout.setContentsMargins(0, 0, 0, 0)
-        main_layout.setSpacing(0)
+        main_layout.setContentsMargins(20, 10, 20, 10)  # Add margins: left, top, right, bottom
+        main_layout.setSpacing(10)  # Add spacing between elements
         self.setLayout(main_layout)  # Set the layout for the window
 
         # Create custom title bar and add to layout
         title_bar_frame = create_title_bar(self)
         main_layout.addWidget(title_bar_frame)
 
-        # Add the image as the content
+        # Create the content layout
+        content_layout = self.create_content_layout()
+        main_layout.addLayout(content_layout)
+
+        # Call the fetch and update RFID function after the UI is set up
+        self.initialize_rfid_fetch()
+
+    def create_content_layout(self):
+        """Creates and returns the main content layout."""
+        content_layout = QHBoxLayout()
+        content_layout.setContentsMargins(0, 0, 0, 0)
+        content_layout.setSpacing(20)  # Increase spacing between elements
+
+        # Create and add the left form layout
+        left_form_layout = create_left_form_layout(self.vehicle_info)
+        content_layout.addLayout(left_form_layout)
+
+        # Add a vertical separator
+        separator1 = self.create_separator()
+        content_layout.addWidget(separator1)
+
+        # Create and add the right form layout
+        right_form_layout = create_right_form_layout(self.vehicle_info)
+        content_layout.addLayout(right_form_layout)
+
+        # Add another vertical separator
+        separator2 = self.create_separator()
+        content_layout.addWidget(separator2)
+
+        # Create and add the image and clock layout
+        image_clock_layout = self.create_image_clock_layout()
+        content_layout.addLayout(image_clock_layout)
+
+        return content_layout
+
+    def create_image_clock_layout(self):
+        """Creates and returns the image and clock layout."""
+        image_clock_layout = QVBoxLayout()
+        image_clock_layout.setSpacing(10)  # Add spacing between the image and clock
+
+        # Add the image label
         image_label = create_image_label(self)
-        main_layout.addWidget(image_label)
+        image_label.setFixedSize(250, 200)  # Set size for the image
+        image_clock_layout.addWidget(image_label, 0, Qt.AlignCenter)
+
+        # (Assume clock frame creation is imported or defined elsewhere)
+        clock_frame = create_clock_frame(self)
+        image_clock_layout.addWidget(clock_frame, 0, Qt.AlignCenter)
+
+        return image_clock_layout
+
+    def create_separator(self):
+        """Creates and returns a vertical separator."""
+        separator = QFrame()
+        separator.setFrameShape(QFrame.VLine)
+        separator.setFrameShadow(QFrame.Sunken)
+        separator.setStyleSheet("background-color: #2c3e50;")
+        return separator
+
+    def initialize_rfid_fetch(self):
+        """Initialize RFID fetching and updating."""
+        fetch_and_update_rfid(
+            "app/file/readVehicle.txt",  # Path to the RFID file
+            self.vehicle_info['rfidInputLeft'], 
+            self.vehicle_info['rfidInputRight'], 
+            self.vehicle_info['statusLabel'], 
+            self.vehicle_info['indicatorLabel'], 
+            self.vehicle_info,
+            self  # Pass the window instance for reset functionality
+        )
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)

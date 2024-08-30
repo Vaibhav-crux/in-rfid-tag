@@ -1,0 +1,5 @@
+/* app/stylesheet/login/label.qss */
+QLabel {
+    font-size: 12px;
+    font-weight: bold;
+}

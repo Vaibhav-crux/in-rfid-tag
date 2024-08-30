@@ -1,30 +1,34 @@
 import sys
 from PyQt5.QtWidgets import (
-    QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QFrame
+    QApplication, QWidget, QLabel, QLineEdit, QPushButton, QVBoxLayout, QHBoxLayout, QFrame
 )
-from PyQt5.QtGui import QPixmap, QFont, QPalette, QColor, QPainterPath, QRegion
-from PyQt5.QtCore import Qt, QRectF
+from PyQt5.QtGui import QPixmap, QFont, QPalette, QColor
+from PyQt5.QtCore import Qt
 from app.ui.titleBar.window_controls import create_minimize_button, create_close_button
 from app.ui.mainWindow.mainWindow import FullScreenWindow
 from app.ui.login.imageHandler import fetch_and_process_image
-from app.ui.login.inRfidWidget import InRfidWidget  # Import the new widget
 
 class LoginWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
 
+    def load_stylesheet(self, file_path):
+        """Utility function to load and return a stylesheet."""
+        with open(file_path, "r") as file:
+            return file.read()
+
     def initUI(self):
-        # Window settings
+        # Remove the default title bar
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
-        self.setWindowTitle('In Vehicle')
 
-        # Make the window full screen
-        self.showFullScreen()  # This will make the window full screen
+        self.setWindowTitle('Login')
+        self.setGeometry(100, 100, 500, 400)
+        self.setFixedSize(500, 400)  # Fixed size to avoid resizing
 
-        # Apply rounded corners
-        # self.apply_rounded_corners(20)
+        # Center the window on the screen
+        self.center_on_screen()
 
         # Main layout
         main_layout = QVBoxLayout()
@@ -41,7 +45,7 @@ class LoginWindow(QWidget):
         left_spacer = QLabel('', title_bar)
         title_bar_layout.addWidget(left_spacer)
 
-        title_label = QLabel('Vehicle In ', title_bar)
+        title_label = QLabel('Login', title_bar)
         title_label.setAlignment(Qt.AlignCenter)
         title_bar_layout.addWidget(title_label)
 
@@ -63,43 +67,65 @@ class LoginWindow(QWidget):
 
         main_layout.addWidget(title_bar)
 
-        # Content layout
+        # Rest of the UI
         content_frame = QFrame(self)
         content_layout = QVBoxLayout(content_frame)
         content_layout.setAlignment(Qt.AlignCenter)
 
-        # Image Frame
-        image_frame = QFrame(self)
-        image_layout = QVBoxLayout(image_frame)
-        image_layout.setAlignment(Qt.AlignCenter)
-
         # Image in a circular shape
         image_label = QLabel(self)
-        radius = 75
+
+        # Use the fetch_and_process_image function
+        radius = 75  # Radius of the circle
         circular_pixmap = fetch_and_process_image(radius)
+
         image_label.setPixmap(circular_pixmap)
         image_label.setFixedSize(2 * radius, 2 * radius)
         image_label.setAlignment(Qt.AlignCenter)
 
+        # Center the image in the window
+        image_layout = QVBoxLayout()
         image_layout.addWidget(image_label)
+        image_layout.setAlignment(Qt.AlignCenter)
 
-        # Add the image frame to the content layout
-        content_layout.addWidget(image_frame)
+        # Right side with login form
+        form_layout = QVBoxLayout()
+        form_layout.setAlignment(Qt.AlignCenter)
 
-        # InRfidWidget Frame
-        rfid_frame = QFrame(self)
-        rfid_layout = QVBoxLayout(rfid_frame)
-        rfid_layout.setAlignment(Qt.AlignCenter)
+        # Load and apply stylesheets
+        email_label = QLabel('Enter your User Id:', self)
+        email_label.setFont(QFont('Arial', 12, QFont.Bold))  # Apply font directly
+        self.email_entry = QLineEdit(self)
+        self.email_entry.setFixedHeight(35)
+        self.email_entry.setStyleSheet(self.load_stylesheet('app/stylesheet/login/lineEdit.qss'))
+        self.email_entry.setPlaceholderText("UserId")
+        self.email_entry.setFocus()
 
-        # Add InRfidWidget to the RFID frame
-        rfid_widget = InRfidWidget(self)
-        rfid_layout.addWidget(rfid_widget)
+        password_label = QLabel('Password:', self)
+        password_label.setFont(QFont('Arial', 12, QFont.Bold))  # Apply font directly
+        self.password_entry = QLineEdit(self)
+        self.password_entry.setFixedHeight(35)
+        self.password_entry.setStyleSheet(self.load_stylesheet('app/stylesheet/login/lineEdit.qss'))
+        self.password_entry.setEchoMode(QLineEdit.Password)
+        self.password_entry.setPlaceholderText("Password")
 
-        # Add the RFID frame to the content layout
-        content_layout.addWidget(rfid_frame)
+        self.login_button = QPushButton('Login', self)
+        self.login_button.setStyleSheet(self.load_stylesheet('app/stylesheet/login/button.qss'))
 
-        # Add content frame to main layout
+        # Connect the login button to the open_fullscreen_window method
+        self.login_button.clicked.connect(self.open_fullscreen_window)
+
+        # Arrange the widgets in the form layout
+        form_layout.addLayout(image_layout)
+        form_layout.addWidget(email_label)
+        form_layout.addWidget(self.email_entry)
+        form_layout.addWidget(password_label)
+        form_layout.addWidget(self.password_entry)
+        form_layout.addWidget(self.login_button)
+
+        content_layout.addLayout(form_layout)
         main_layout.addWidget(content_frame)
+
         self.setLayout(main_layout)
 
         # Set the background color of the window
@@ -108,13 +134,30 @@ class LoginWindow(QWidget):
         palette.setColor(QPalette.Window, QColor(255, 255, 255))  # White background
         self.setPalette(palette)
 
-    def apply_rounded_corners(self, radius):
-        """Apply rounded corners to the window."""
-        path = QPainterPath()
-        rect = QRectF(0, 0, self.width(), self.height())
-        path.addRoundedRect(rect, radius, radius)
-        region = QRegion(path.toFillPolygon().toPolygon())
-        self.setMask(region)
+        # Connect Enter key press events
+        self.email_entry.returnPressed.connect(self.focus_password_entry)
+        self.password_entry.returnPressed.connect(self.trigger_login)
+
+    def center_on_screen(self):
+        """Center the window on the screen."""
+        screen_geometry = QApplication.desktop().screenGeometry()
+        x = (screen_geometry.width() - self.width()) // 2
+        y = (screen_geometry.height() - self.height()) // 2
+        self.move(x, y)
+
+    def focus_password_entry(self):
+        """Move focus to the password entry when Enter is pressed in the email entry."""
+        self.password_entry.setFocus()
+
+    def trigger_login(self):
+        """Trigger the login button when Enter is pressed in the password entry."""
+        self.login_button.click()
+
+    def open_fullscreen_window(self):
+        """Open the full-screen window when the login button is clicked."""
+        self.full_screen_window = FullScreenWindow()
+        self.full_screen_window.show()
+        self.close()  # Close the login window
 
     def mousePressEvent(self, event):
         # Enable dragging of the window
@@ -132,5 +175,5 @@ class LoginWindow(QWidget):
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = LoginWindow()
-    window.showFullScreen()  # Ensure it opens in full screen
+    window.show()
     sys.exit(app.exec_())
