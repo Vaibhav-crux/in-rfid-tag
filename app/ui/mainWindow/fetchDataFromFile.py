@@ -33,7 +33,7 @@ def fetch_and_update_rfid(file_path, rfid_input_left, rfid_input_right, status_l
                 validity_till_date = datetime.strptime(record.validityTill, "%d/%m/%Y").date()
 
                 if validity_till_date < current_date:
-                    status_label.setText("Vehicle Validity Expire")
+                    status_label.setText("Vehicle Validity Expired")
                     indicator_label.setStyleSheet("background-color: red; border-radius: 10px;")
                 else:
                     # Populate the vehicle information
@@ -59,8 +59,9 @@ def fetch_and_update_rfid(file_path, rfid_input_left, rfid_input_right, status_l
                         status_label.setText("Vehicle Not Out")
                         indicator_label.setStyleSheet("background-color: red; border-radius: 10px;")
                     else:
-                        # Insert a new VehicleInOut entry
-                        insert_vehicle_in_out_entry(vehicle_info)
+                        # Read weigh data and insert a new VehicleInOut entry
+                        gross, tare, challan_no = read_weigh_data("app/file/weigh.txt")
+                        insert_vehicle_in_out_entry(vehicle_info, gross=gross, tare=tare, challan_no=challan_no)
                         status_label.setText("Allowed Vehicle to In")
                         indicator_label.setStyleSheet("background-color: green; border-radius: 10px;")
             else:
@@ -94,3 +95,26 @@ def reset_ui(window, file_path, rfid_input_left, rfid_input_right, status_label,
     # Clear the text file
     with open(file_path, "w") as file:
         file.write("")
+
+def read_weigh_data(file_path):
+    """Reads the Gross, Tare, and Challan No. from the specified weigh file."""
+    try:
+        with open(file_path, "r") as file:
+            line = file.readline().strip()
+            if line:
+                data = line.split(",")
+                if len(data) == 3:
+                    gross = float(data[0].strip())
+                    tare = float(data[1].strip())
+                    challan_no = data[2].strip()
+                    return gross, tare, challan_no
+                else:
+                    print("Weigh file does not contain exactly 3 values.")
+            else:
+                print("Weigh file is empty.")
+    except FileNotFoundError:
+        print(f"Weigh file not found: {file_path}")
+    except Exception as e:
+        print(f"Error reading weigh data: {e}")
+    
+    return None, None, None

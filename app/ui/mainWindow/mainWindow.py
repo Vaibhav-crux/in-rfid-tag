@@ -33,7 +33,7 @@ class FullScreenWindow(QWidget):
 
         # Remove the default title bar
         self.setWindowFlags(Qt.FramelessWindowHint)
-        self.showMaximized()
+        self.showFullScreen()  # Change this to showFullScreen()
 
         # Main layout with margins
         main_layout = QVBoxLayout()
@@ -51,6 +51,7 @@ class FullScreenWindow(QWidget):
 
         # Call the fetch and update RFID function after the UI is set up
         self.initialize_rfid_fetch()
+
 
     def create_content_layout(self):
         """Creates and returns the main content layout."""

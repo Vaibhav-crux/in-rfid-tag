@@ -48,10 +48,14 @@ def check_vehicle_in_out_status(rfid_tag):
     finally:
         session.close()
 
-def insert_vehicle_in_out_entry(vehicle_info):
+def insert_vehicle_in_out_entry(vehicle_info, gross=None, tare=None, challan_no=None):
     """Inserts a new entry into the VehicleInOut table."""
     session = create_session()
     try:
+        net = None
+        if gross is not None and tare is not None:
+            net = gross - tare
+        
         new_entry = VehicleInOut(
             rfidTag=vehicle_info['rfidInputRight'].text(),
             typeOfVehicle=vehicle_info['typeOfVehicleRight'].text(),
@@ -69,6 +73,10 @@ def insert_vehicle_in_out_entry(vehicle_info):
             timeIn=datetime.utcnow().strftime("%H:%M:%S"),
             user="System",  # Replace with actual user if available
             shift="Default",  # Replace with actual shift if available
+            gross=gross,
+            tare=tare,
+            net=net,
+            challanNo=challan_no
         )
         session.add(new_entry)
         session.commit()

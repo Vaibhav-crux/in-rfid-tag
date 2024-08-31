@@ -41,7 +41,7 @@ def create_right_form_layout(vehicle_info):
     right_form_layout.addRow(QLabel("Transporter:", font=label_font), vehicle_info['transporter'])
     right_form_layout.addRow(QLabel("Driver:", font=label_font), vehicle_info['driverOwner'])
     right_form_layout.addRow(QLabel("Weighbridge No:", font=label_font), vehicle_info['weighbridgeNo'])
-    right_form_layout.addRow(QLabel("Challan No:", font=label_font), vehicle_info['doNumber'])
+    right_form_layout.addRow(QLabel("Do No:", font=label_font), vehicle_info['doNumber'])
     right_form_layout.addRow(QLabel("Visit Purpose:", font=label_font), vehicle_info['visitPurpose'])
     right_form_layout.addRow(QLabel("Visit Place:", font=label_font), vehicle_info['placeToVisit'])
     right_form_layout.addRow(QLabel("Visit Person:", font=label_font), vehicle_info['personToVisit'])
