@@ -19,7 +19,7 @@ def fetch_and_update_rfid(file_path, rfid_input_left, rfid_input_right, status_l
         # Check the RFID status in the AllotedTags table
         rfid_status = check_rfid_status_in_db(rfid_tag)
         if rfid_status == "blocked":
-            status_label.setText("Vehicle Blocked")
+            status_label.setText("Vehicle Blacklisted")
             indicator_label.setStyleSheet("background-color: red; border-radius: 10px;")
         elif rfid_status == "not_found":
             status_label.setText("Vehicle not found")

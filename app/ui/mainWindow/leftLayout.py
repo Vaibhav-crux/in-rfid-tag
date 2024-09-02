@@ -23,8 +23,8 @@ def create_left_form_layout(vehicle_info):
 
     # Add labels and text boxes to the form layout
     left_form_layout.addRow(QLabel("RFID Tag:", font=label_font), vehicle_info['rfidInputLeft'])
-    left_form_layout.addRow(QLabel("Vehicle No:", font=label_font), vehicle_info['vehicleNumberLeft'])
     left_form_layout.addRow(QLabel("Type of Vehicle:", font=label_font), vehicle_info['typeOfVehicleLeft'])
+    left_form_layout.addRow(QLabel("Vehicle No:", font=label_font), vehicle_info['vehicleNumberLeft'])
     left_form_layout.addRow(QLabel("Validity Till:", font=label_font), vehicle_info['validityTillLeft'])
 
     # Add the status frame
