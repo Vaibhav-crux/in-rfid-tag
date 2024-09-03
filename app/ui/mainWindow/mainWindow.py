@@ -1,13 +1,12 @@
-# app/ui/mainWindow/mainWindow.py
-
 import sys
-from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QFrame
+from PyQt5.QtWidgets import QApplication, QWidget, QVBoxLayout, QHBoxLayout, QFrame, QLabel
 from PyQt5.QtCore import Qt, QTimer
+from PyQt5.QtGui import QFont
 from .title_bar import create_title_bar
 from .image_label import create_image_label
 from .leftLayout import create_left_form_layout
 from .rightLayout import create_right_form_layout
-from .fetchDataFromFile import fetch_and_update_rfid
+from .fetchDataFromFile import initialize_rfid_monitoring
 from .timeSection import create_clock_frame
 
 class FullScreenWindow(QWidget):
@@ -37,7 +36,7 @@ class FullScreenWindow(QWidget):
 
         # Main layout with margins
         main_layout = QVBoxLayout()
-        main_layout.setContentsMargins(20, 10, 20, 10)  # Add margins: left, top, right, bottom
+        main_layout.setContentsMargins(20, 0, 20, 10)  # Add margins: left, top, right, bottom
         main_layout.setSpacing(10)  # Add spacing between elements
         self.setLayout(main_layout)  # Set the layout for the window
 
@@ -49,9 +48,25 @@ class FullScreenWindow(QWidget):
         content_layout = self.create_content_layout()
         main_layout.addLayout(content_layout)
 
-        # Call the fetch and update RFID function after the UI is set up
-        self.initialize_rfid_fetch()
+        # Add the copyright notice below the buttons in two lines
+        copyright_label_line1 = QLabel("Copyright laws vary around the world, and there is no global version of copyright,", self)
+        copyright_label_line2 = QLabel("but many countries are part of the Starlabs Technologo Pvt. Ltd., which deals with protecting original works and the authors’ rights over them.", self)
 
+        # Center align the text
+        copyright_label_line1.setAlignment(Qt.AlignCenter)
+        copyright_label_line2.setAlignment(Qt.AlignCenter)
+
+        # Set font for the labels
+        font = QFont("Arial", 10)
+        copyright_label_line1.setFont(font)
+        copyright_label_line2.setFont(font)
+
+        # Add the labels to the main layout
+        main_layout.addWidget(copyright_label_line1)
+        main_layout.addWidget(copyright_label_line2)
+
+        # Initialize RFID monitoring after UI setup
+        self.initialize_rfid_monitoring()
 
     def create_content_layout(self):
         """Creates and returns the main content layout."""
@@ -86,14 +101,13 @@ class FullScreenWindow(QWidget):
         image_clock_layout = QVBoxLayout()
         image_clock_layout.setSpacing(10)  # Add spacing between the image and clock
 
-        # Add the image label
-        image_label = create_image_label(self)
-        image_label.setFixedSize(250, 200)  # Set size for the image
-        image_clock_layout.addWidget(image_label, 0, Qt.AlignCenter)
-
-        # (Assume clock frame creation is imported or defined elsewhere)
         clock_frame = create_clock_frame(self)
         image_clock_layout.addWidget(clock_frame, 0, Qt.AlignCenter)
+
+        # Add the image label
+        image_label = create_image_label(self)
+        image_label.setFixedSize(400, 150)  # Set size for the image
+        image_clock_layout.addWidget(image_label, 0, Qt.AlignCenter)
 
         return image_clock_layout
 
@@ -105,10 +119,9 @@ class FullScreenWindow(QWidget):
         separator.setStyleSheet("background-color: #2c3e50;")
         return separator
 
-    def initialize_rfid_fetch(self):
-        """Initialize RFID fetching and updating."""
-        fetch_and_update_rfid(
-            "app/file/readVehicle.txt",  # Path to the RFID file
+    def initialize_rfid_monitoring(self):
+        """Initialize RFID monitoring."""
+        initialize_rfid_monitoring(
             self.vehicle_info['rfidInputLeft'], 
             self.vehicle_info['rfidInputRight'], 
             self.vehicle_info['statusLabel'], 

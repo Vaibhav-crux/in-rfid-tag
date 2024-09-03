@@ -1,4 +1,4 @@
-# app/ui/mainWindow/fetchDataFromFile.py
+# fetchDataFromFile.py
 
 from datetime import datetime
 from PyQt5.QtCore import QTimer
@@ -9,11 +9,15 @@ from app.function.database_functions import (
     insert_vehicle_in_out_entry
 )
 
-def fetch_and_update_rfid(file_path, rfid_input_left, rfid_input_right, status_label, indicator_label, vehicle_info, window):
-    """Fetches the RFID tag from the specified file and updates the provided text boxes."""
-    rfid_tag = read_rfid_from_file(file_path)
+def initialize_rfid_monitoring(rfid_input_left, rfid_input_right, status_label, indicator_label, vehicle_info, window):
+    """Sets up monitoring for the RFID Tag TextBox."""
+    rfid_input_left.textChanged.connect(
+        lambda: validate_rfid_tag(rfid_input_left.text(), rfid_input_left, rfid_input_right, status_label, indicator_label, vehicle_info, window)
+    )
+
+def validate_rfid_tag(rfid_tag, rfid_input_left, rfid_input_right, status_label, indicator_label, vehicle_info, window):
+    """Validates the RFID tag and updates the UI accordingly."""
     if rfid_tag:
-        rfid_input_left.setText(rfid_tag)
         rfid_input_right.setText(rfid_tag)
 
         # Check the RFID status in the AllotedTags table
@@ -68,19 +72,10 @@ def fetch_and_update_rfid(file_path, rfid_input_left, rfid_input_right, status_l
                 status_label.setText("Vehicle Not Registered")
                 indicator_label.setStyleSheet("background-color: yellow; border-radius: 10px;")
 
-        # Schedule a reset of the UI after 5 seconds, regardless of the outcome
-        QTimer.singleShot(5000, lambda: reset_ui(window, file_path, rfid_input_left, rfid_input_right, status_label, indicator_label, vehicle_info))
+        # Schedule a reset of the UI after 5 seconds, capturing the current state
+        QTimer.singleShot(5000, lambda: reset_ui(window, rfid_input_left, rfid_input_right, status_label, indicator_label, vehicle_info))
 
-def read_rfid_from_file(file_path):
-    """Reads the RFID tag from the specified file."""
-    try:
-        with open(file_path, "r") as file:
-            return file.readline().strip()  # Read the first line and strip any extra whitespace
-    except FileNotFoundError:
-        print(f"RFID file not found: {file_path}")
-        return ""
-
-def reset_ui(window, file_path, rfid_input_left, rfid_input_right, status_label, indicator_label, vehicle_info):
+def reset_ui(window, rfid_input_left, rfid_input_right, status_label, indicator_label, vehicle_info):
     """Resets the UI after the action is completed."""
     # Clear the text boxes
     rfid_input_left.clear()
@@ -91,10 +86,6 @@ def reset_ui(window, file_path, rfid_input_left, rfid_input_right, status_label,
     # Reset the status label and indicator
     status_label.setText("Waiting")
     indicator_label.setStyleSheet("background-color: grey; border-radius: 10px;")
-
-    # Clear the text file
-    with open(file_path, "w") as file:
-        file.write("")
 
 def read_weigh_data(file_path):
     """Reads the Gross, Tare, and Challan No. from the specified weigh file."""
