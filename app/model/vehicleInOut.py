@@ -39,8 +39,6 @@ class VehicleInOut(Base):
     personToVisit = Column(String(255), nullable=True)
     validityTill = Column(String(255), nullable=True)
     section = Column(String(100), nullable=True)
-    
-    # New Fields
     dateIn = Column(Text, nullable=False)  
     timeIn = Column(Text, nullable=False)
     user = Column(String(255), nullable=True)
