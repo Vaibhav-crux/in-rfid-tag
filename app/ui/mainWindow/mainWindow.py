@@ -49,21 +49,20 @@ class FullScreenWindow(QWidget):
         main_layout.addLayout(content_layout)
 
         # Add the copyright notice below the buttons in two lines
-        copyright_label_line1 = QLabel("Copyright laws vary around the world, and there is no global version of copyright,", self)
-        copyright_label_line2 = QLabel("but many countries are part of the Starlabs Technologo Pvt. Ltd., which deals with protecting original works and the authors’ rights over them.", self)
+        copyright_label_line1 = QLabel("Copyright laws vary around the world, and there is no global version of copyright,but many countries are part of the Starlabs Technologo Pvt. Ltd., which deals with protecting.", self)
 
         # Center align the text
         copyright_label_line1.setAlignment(Qt.AlignCenter)
-        copyright_label_line2.setAlignment(Qt.AlignCenter)
 
         # Set font for the labels
         font = QFont("Arial", 10)
         copyright_label_line1.setFont(font)
-        copyright_label_line2.setFont(font)
+
+        # Set font color to grey
+        copyright_label_line1.setStyleSheet("color: grey;")
 
         # Add the labels to the main layout
         main_layout.addWidget(copyright_label_line1)
-        main_layout.addWidget(copyright_label_line2)
 
         # Initialize RFID monitoring after UI setup
         self.initialize_rfid_monitoring()

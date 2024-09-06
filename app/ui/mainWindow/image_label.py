@@ -6,12 +6,12 @@ def create_image_label(parent):
     """Creates a QLabel with an image loaded from a predefined file."""
 
     # Local image file path
-    image_path = "app/file/starlab.jpg"
+    image_path = "app/file/starlab.png"
     
     image_label = QLabel(parent)
     
     # Set fixed size for the image label
-    image_label.setFixedSize(400, 150)
+    image_label.setFixedSize(400, 200)
 
     # Load the image from the file
     pixmap = load_image_from_file(image_path)
